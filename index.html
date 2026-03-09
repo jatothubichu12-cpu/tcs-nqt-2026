@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f172a">
+<meta name="description" content="TCS NQT 2026 - 3 Month Preparation Tracker">
+<link rel="manifest" href="manifest.json">
+<title>TCS NQT 2026 | 3-Month Prep Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f1e;
+    --surface: #0f172a;
+    --card: #141e33;
+    --border: #1e3a5f;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #10b981;
+    --warn: #f59e0b;
+    --danger: #ef4444;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --font-head: 'Syne', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-head);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content:'';
+    position:fixed; inset:0; z-index:0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events:none;
+  }
+
+  /* Header */
+  header {
+    position:sticky; top:0; z-index:100;
+    background: rgba(10,15,30,0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .logo { display:flex; align-items:center; gap:12px; }
+  .logo-icon {
+    width:40px; height:40px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; font-weight:800; color:#fff;
+    font-family: var(--font-mono);
+  }
+  .logo-text { font-size:18px; font-weight:800; letter-spacing:-0.5px; }
+  .logo-text span { color: var(--accent); }
+
+  .header-stats { display:flex; gap:20px; align-items:center; }
+  .stat-pill {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius:999px;
+    padding:6px 14px;
+    font-family: var(--font-mono);
+    font-size:12px;
+    display:flex; align-items:center; gap:6px;
+  }
+  .stat-pill .dot { width:8px; height:8px; border-radius:50%; }
+  .dot-green { background: var(--accent3); }
+  .dot-blue { background: var(--accent); }
+
+  /* Hero */
+  .hero {
+    position:relative; z-index:1;
+    padding: 48px 24px 32px;
+    text-align:center;
+    max-width:900px; margin:0 auto;
+  }
+  .hero-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.3);
+    border-radius:999px; padding:6px 16px;
+    font-size:12px; font-family:var(--font-mono);
+    color: var(--accent); margin-bottom:20px;
+    letter-spacing:1px;
+  }
+  .hero h1 {
+    font-size: clamp(32px, 6vw, 64px);
+    font-weight:800;
+    line-height:1.1;
+    letter-spacing:-2px;
+    margin-bottom:16px;
+  }
+  .hero h1 .highlight {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+  }
+  .hero p {
+    color: var(--muted);
+    font-size:16px;
+    max-width:600px; margin:0 auto 32px;
+    line-height:1.7;
+  }
+
+  /* Progress Overview */
+  .progress-overview {
+    position:relative; z-index:1;
+    max-width:1100px; margin:0 auto 40px;
+    padding:0 24px;
+    display:grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+    gap:16px;
+  }
+  .overview-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius:16px;
+    padding:20px;
+    transition: border-color 0.2s;
+  }
+  .overview-card:hover { border-color: var(--accent); }
+  .overview-card .oc-label {
+    font-size:11px; font-family:var(--font-mono);
+    color: var(--muted); letter-spacing:1px; text-transform:uppercase;
+    margin-bottom:8px;
+  }
+  .overview-card .oc-value {
+    font-size:32px; font-weight:800;
+    font-family:var(--font-mono);
+    color: var(--accent);
+  }
+  .overview-card .oc-sub {
+    font-size:12px; color: var(--muted); margin-top:4px;
+  }
+  .progress-bar-wrap {
+    background: var(--border);
+    border-radius:999px; height:4px;
+    margin-top:12px; overflow:hidden;
+  }
+  .progress-bar-fill {
+    height:100%; border-radius:999px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.5s ease;
+  }
+
+  /* Month Tabs */
+  .month-tabs {
+    position:relative; z-index:1;
+    max-width:1100px; margin:0 auto 24px;
+    padding:0 24px;
+    display:flex; gap:12px; flex-wrap:wrap;
+  }
+  .tab-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius:10px;
+    padding:10px 24px;
+    font-family:var(--font-head);
+    font-size:14px; font-weight:700;
+    color: var(--muted);
+    cursor:pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .tab-btn.active {
+    background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(124,58,237,0.15));
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Week sections */
+  .content {
+    position:relative; z-index:1;
+    max-width:1100px; margin:0 auto;
+    padding:0 24px 80px;
+  }
+  .month-section { display:none; }
+  .month-section.active { display:block; }
+
+  .month-header {
+    margin-bottom:28px;
+    padding:24px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius:16px;
+    border-left: 4px solid var(--accent);
+  }
+  .month-header h2 {
+    font-size:24px; font-weight:800; margin-bottom:8px;
+    letter-spacing:-0.5px;
+  }
+  .month-header p { color: var(--muted); font-size:14px; line-height:1.6; }
+  .month-goal {
+    margin-top:12px;
+    display:flex; flex-wrap:wrap; gap:8px;
+  }
+  .goal-tag {
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius:6px;
+    padding:4px 10px;
+    font-size:12px; color: var(--accent);
+    font-family: var(--font-mono);
+  }
+
+  .week-block { margin-bottom:32px; }
+  .week-label {
+    font-size:12px; font-family:var(--font-mono);
+    color: var(--muted); letter-spacing:2px;
+    text-transform:uppercase; margin-bottom:12px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .week-label::after {
+    content:''; flex:1; height:1px;
+    background: var(--border);
+  }
+
+  .days-grid {
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
+    gap:12px;
+  }
+  .day-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius:14px;
+    padding:16px;
+    cursor:pointer;
+    transition: all 0.25s;
+    position:relative;
+    overflow:hidden;
+  }
+  .day-card::before {
+    content:'';
+    position:absolute; top:0; left:0; bottom:0;
+    width:3px;
+    background: var(--border);
+    transition: background 0.25s;
+  }
+  .day-card:hover { border-color: rgba(0,212,255,0.4); transform: translateY(-2px); }
+  .day-card:hover::before { background: var(--accent); }
+  .day-card.completed {
+    border-color: rgba(16,185,129,0.4);
+    background: rgba(16,185,129,0.05);
+  }
+  .day-card.completed::before { background: var(--accent3); }
+
+  .day-top {
+    display:flex; justify-content:space-between; align-items:flex-start;
+    margin-bottom:10px;
+  }
+  .day-num {
+    font-family:var(--font-mono);
+    font-size:11px; color: var(--muted);
+    letter-spacing:1px;
+  }
+  .day-check {
+    width:22px; height:22px;
+    border-radius:6px;
+    border: 2px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-size:12px;
+    transition: all 0.2s;
+    flex-shrink:0;
+  }
+  .day-card.completed .day-check {
+    background: var(--accent3);
+    border-color: var(--accent3);
+    color:#fff;
+  }
+  .day-title {
+    font-size:15px; font-weight:700;
+    line-height:1.3; margin-bottom:6px;
+  }
+  .day-topics {
+    font-size:12px; color: var(--muted);
+    line-height:1.6;
+  }
+  .day-tags {
+    margin-top:10px;
+    display:flex; flex-wrap:wrap; gap:6px;
+  }
+  .day-tag {
+    padding:3px 8px;
+    border-radius:5px;
+    font-size:11px; font-family:var(--font-mono);
+  }
+  .tag-apt { background:rgba(245,158,11,0.15); color:var(--warn); }
+  .tag-code { background:rgba(0,212,255,0.1); color:var(--accent); }
+  .tag-cs { background:rgba(124,58,237,0.15); color:#a78bfa; }
+  .tag-verbal { background:rgba(16,185,129,0.1); color:var(--accent3); }
+  .tag-hr { background:rgba(239,68,68,0.1); color:var(--danger); }
+  .tag-ilp { background:rgba(251,191,36,0.1); color:#fbbf24; }
+
+  .yt-link {
+    display:inline-flex; align-items:center; gap:6px;
+    margin-top:10px;
+    font-size:12px; color: #ff4444;
+    text-decoration:none;
+    font-family: var(--font-mono);
+    transition: opacity 0.2s;
+  }
+  .yt-link:hover { opacity:0.7; }
+  .yt-icon { font-size:14px; }
+
+  /* Modal */
+  .modal-overlay {
+    position:fixed; inset:0; z-index:200;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(8px);
+    display:none; align-items:center; justify-content:center;
+    padding:20px;
+  }
+  .modal-overlay.open { display:flex; }
+  .modal {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius:20px;
+    padding:32px;
+    max-width:600px; width:100%;
+    max-height:85vh; overflow-y:auto;
+    position:relative;
+  }
+  .modal-close {
+    position:absolute; top:16px; right:16px;
+    background:var(--surface); border:none;
+    color:var(--muted); font-size:20px;
+    cursor:pointer; border-radius:8px;
+    width:32px; height:32px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .modal-close:hover { color:var(--text); }
+  .modal h3 { font-size:22px; font-weight:800; margin-bottom:6px; }
+  .modal .modal-day-num { font-family:var(--font-mono); font-size:12px; color:var(--accent); margin-bottom:16px; letter-spacing:1px; }
+  .modal-section { margin-bottom:20px; }
+  .modal-section-title {
+    font-size:12px; font-family:var(--font-mono);
+    color:var(--muted); letter-spacing:1px;
+    text-transform:uppercase; margin-bottom:8px;
+  }
+  .task-list { list-style:none; }
+  .task-list li {
+    padding:8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size:14px; line-height:1.5; color:var(--text);
+    display:flex; gap:8px; align-items:flex-start;
+  }
+  .task-list li::before { content:'→'; color:var(--accent); flex-shrink:0; }
+  .task-list li:last-child { border:none; }
+  .modal-complete-btn {
+    width:100%; padding:14px;
+    border:none; border-radius:12px;
+    background: linear-gradient(135deg, var(--accent3), #059669);
+    color:#fff; font-family:var(--font-head);
+    font-size:15px; font-weight:700;
+    cursor:pointer; margin-top:20px;
+    transition: opacity 0.2s;
+  }
+  .modal-complete-btn:hover { opacity:0.85; }
+  .modal-complete-btn.done {
+    background: var(--border);
+    color: var(--muted);
+  }
+  .modal-yt {
+    display:flex; align-items:center; gap:10px;
+    background: rgba(255,68,68,0.1);
+    border: 1px solid rgba(255,68,68,0.2);
+    border-radius:10px; padding:12px;
+    text-decoration:none;
+    color: var(--text);
+    margin-bottom:12px;
+    transition: border-color 0.2s;
+  }
+  .modal-yt:hover { border-color: rgba(255,68,68,0.5); }
+  .modal-yt .yt-thumb { font-size:24px; }
+  .modal-yt .yt-info { flex:1; }
+  .modal-yt .yt-title { font-size:13px; font-weight:700; }
+  .modal-yt .yt-channel { font-size:11px; color:var(--muted); font-family:var(--font-mono); }
+
+  /* GitHub section */
+  .github-section {
+    position:relative; z-index:1;
+    max-width:1100px; margin:0 auto 32px;
+    padding:0 24px;
+  }
+  .github-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius:16px; padding:24px;
+    display:flex; flex-wrap:wrap; gap:16px;
+    align-items:center; justify-content:space-between;
+  }
+  .github-info h3 { font-size:18px; font-weight:800; margin-bottom:4px; }
+  .github-info p { font-size:13px; color:var(--muted); }
+  .github-btn {
+    display:flex; align-items:center; gap:8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius:10px; padding:10px 20px;
+    color: var(--text); text-decoration:none;
+    font-family:var(--font-mono); font-size:13px;
+    cursor:pointer; transition: border-color 0.2s;
+  }
+  .github-btn:hover { border-color: var(--accent); }
+
+  /* Toast */
+  .toast {
+    position:fixed; bottom:24px; right:24px; z-index:300;
+    background: var(--accent3);
+    color:#fff; padding:12px 20px;
+    border-radius:12px; font-size:14px; font-weight:700;
+    transform: translateY(100px); opacity:0;
+    transition: all 0.3s ease;
+  }
+  .toast.show { transform: translateY(0); opacity:1; }
+
+  @media (max-width:600px) {
+    .header-stats { display:none; }
+    .hero h1 { letter-spacing:-1px; }
+    .days-grid { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">T</div>
+    <div class="logo-text">TCS<span>NQT</span> 2026</div>
+  </div>
+  <div class="header-stats">
+    <div class="stat-pill"><span class="dot dot-green"></span><span id="hdr-done">0</span> Done</div>
+    <div class="stat-pill"><span class="dot dot-blue"></span><span id="hdr-left">90</span> Left</div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-badge">🎯 90-DAY BATTLE PLAN</div>
+  <h1>Crack TCS NQT<br><span class="highlight">Ninja Edition</span></h1>
+  <p>Your complete day-by-day roadmap covering Written Test, Technical Round, Managerial Round, HR Round & ILP. Check off each day as you go.</p>
+</div>
+
+<div class="progress-overview">
+  <div class="overview-card">
+    <div class="oc-label">Overall Progress</div>
+    <div class="oc-value" id="pct">0%</div>
+    <div class="oc-sub" id="days-done-sub">0 of 90 days completed</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="main-bar" style="width:0%"></div></div>
+  </div>
+  <div class="overview-card">
+    <div class="oc-label">Month 1 – Foundation</div>
+    <div class="oc-value" id="m1-pct">0%</div>
+    <div class="oc-sub">Aptitude + Reasoning + Verbal</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="m1-bar" style="width:0%;background:linear-gradient(90deg,#f59e0b,#ef4444)"></div></div>
+  </div>
+  <div class="overview-card">
+    <div class="oc-label">Month 2 – Technical</div>
+    <div class="oc-value" id="m2-pct">0%</div>
+    <div class="oc-sub">Coding + CS Core + Projects</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="m2-bar" style="width:0%;background:linear-gradient(90deg,#7c3aed,#00d4ff)"></div></div>
+  </div>
+  <div class="overview-card">
+    <div class="oc-label">Month 3 – Interviews + ILP</div>
+    <div class="oc-value" id="m3-pct">0%</div>
+    <div class="oc-sub">TR + MR + HR + ILP Prep</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="m3-bar" style="width:0%;background:linear-gradient(90deg,#10b981,#059669)"></div></div>
+  </div>
+</div>
+
+<div class="github-section">
+  <div class="github-card">
+    <div class="github-info">
+      <h3>📁 GitHub Progress Sync</h3>
+      <p>Add this PWA to your GitHub repo and track your progress with commit history. Each day completion is saved locally.</p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <a href="https://github.com/new" target="_blank" class="github-btn">⊕ Create Repo</a>
+      <button class="github-btn" onclick="exportProgress()">⬇ Export JSON</button>
+      <button class="github-btn" onclick="resetAll()">↺ Reset</button>
+    </div>
+  </div>
+</div>
+
+<div class="month-tabs">
+  <button class="tab-btn active" onclick="showMonth(1,this)">Month 1 — Foundation</button>
+  <button class="tab-btn" onclick="showMonth(2,this)">Month 2 — Technical</button>
+  <button class="tab-btn" onclick="showMonth(3,this)">Month 3 — Interviews & ILP</button>
+</div>
+
+<div class="content">
+
+<!-- ======================== MONTH 1 ======================== -->
+<div class="month-section active" id="month-1">
+  <div class="month-header">
+    <h2>📘 Month 1 — Building the Foundation</h2>
+    <p>Focus: Aptitude, Verbal, Reasoning, and Programming Logic. These form the base for passing the NQT written test. Aim for consistency over speed.</p>
+    <div class="month-goal">
+      <span class="goal-tag">Numerical Ability</span>
+      <span class="goal-tag">Verbal Ability</span>
+      <span class="goal-tag">Reasoning</span>
+      <span class="goal-tag">Programming Logic</span>
+      <span class="goal-tag">Mock Tests</span>
+    </div>
+  </div>
+  <div id="days-m1"></div>
+</div>
+
+<!-- ======================== MONTH 2 ======================== -->
+<div class="month-section" id="month-2">
+  <div class="month-header">
+    <h2>💻 Month 2 — Technical Mastery</h2>
+    <p>Focus: Hands-on Coding (Python/Java/C++), Core CS subjects (OOPS, DBMS, OS, DSA), and Project preparation. This is where Ninja vs Digital is decided.</p>
+    <div class="month-goal">
+      <span class="goal-tag">Hands-on Coding</span>
+      <span class="goal-tag">OOPS</span>
+      <span class="goal-tag">DBMS</span>
+      <span class="goal-tag">OS Basics</span>
+      <span class="goal-tag">Data Structures</span>
+    </div>
+  </div>
+  <div id="days-m2"></div>
+</div>
+
+<!-- ======================== MONTH 3 ======================== -->
+<div class="month-section" id="month-3">
+  <div class="month-header">
+    <h2>🎤 Month 3 — Interview + ILP Prep</h2>
+    <p>Focus: Technical Interview (TR), Managerial Round (MR), HR Round, Mock Interviews, and ILP preparation (Java, SQL, Unix, Agile). Final sprint!</p>
+    <div class="month-goal">
+      <span class="goal-tag">TR Prep</span>
+      <span class="goal-tag">MR Prep</span>
+      <span class="goal-tag">HR Round</span>
+      <span class="goal-tag">ILP: Java</span>
+      <span class="goal-tag">ILP: SQL</span>
+      <span class="goal-tag">Mock Interviews</span>
+    </div>
+  </div>
+  <div id="days-m3"></div>
+</div>
+
+</div><!-- /content -->
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
+  <div class="modal" id="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-day-num" id="modal-daynum"></div>
+    <h3 id="modal-title"></h3>
+    <div id="modal-body"></div>
+    <button class="modal-complete-btn" id="modal-btn" onclick="toggleDayFromModal()"></button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===================== DATA =====================
+const curriculum = {
+  1: [
+    // WEEK 1
+    { day:1, title:"Introduction + TCS NQT Pattern", topics:"Understand exam structure, sections, marking scheme, time limits", tags:["apt","verbal"], tasks:["Watch TCS NQT 2026 full pattern video","Read official TCS iON NQT syllabus","Create your study timetable","Install TCS iON mobile app"], yt:[{title:"TCS NQT 2026 Full Pattern Explained",channel:"Placement Season",url:"https://www.youtube.com/results?search_query=TCS+NQT+2026+exam+pattern"}] },
+    { day:2, title:"Percentages – Basics to Advanced", topics:"Percentage calculations, increase/decrease, successive change", tags:["apt"], tasks:["Study percentage formulas","Solve 20 basic problems","Solve 10 percentage word problems","Note down shortcuts"], yt:[{title:"Percentages Shortcuts for Aptitude",channel:"CareerRide / Exam Fear",url:"https://www.youtube.com/results?search_query=TCS+aptitude+percentages+shortcuts"}] },
+    { day:3, title:"Profit & Loss + Discount", topics:"Cost price, selling price, profit%, loss%, discount formulas", tags:["apt"], tasks:["Learn P&L formulas and tricks","Solve 25 P&L problems","Practice 10 discount problems","TCS previous P&L questions"], yt:[{title:"Profit Loss Tricks for Campus Placements",channel:"Unacademy / PrepInsta",url:"https://www.youtube.com/results?search_query=profit+loss+TCS+aptitude+tricks"}] },
+    { day:4, title:"Ratio & Proportion", topics:"Ratios, proportions, partnership problems, mixture alligation", tags:["apt"], tasks:["Study ratio formulas","Solve 20 ratio problems","10 alligation problems","Speed practice timer (20 mins)"], yt:[{title:"Ratio Proportion TCS NQT",channel:"Placement Season",url:"https://www.youtube.com/results?search_query=ratio+proportion+TCS+NQT+aptitude"}] },
+    { day:5, title:"Time & Work", topics:"Work = Rate × Time, pipes & cisterns, men-days", tags:["apt"], tasks:["Learn time-work formulas","Solve 20 T&W problems","10 pipes & cistern problems","Review shortcuts"], yt:[{title:"Time and Work Shortcuts",channel:"Arun Sharma / MathsTrick",url:"https://www.youtube.com/results?search_query=time+and+work+tricks+placement+aptitude"}] },
+    { day:6, title:"Verbal – Reading Comprehension", topics:"Passage-based questions, main idea, tone, inference", tags:["verbal"], tasks:["Read 2 RC passages daily","Answer questions (20 mins each)","Learn elimination technique","Read one English article"], yt:[{title:"Reading Comprehension Tricks",channel:"Wren & Martin / PrepInsta",url:"https://www.youtube.com/results?search_query=reading+comprehension+tricks+placement"}] },
+    { day:7, title:"Week 1 Mock Test + Revision", topics:"Full mock of Week 1 topics, track weak areas", tags:["apt","verbal"], tasks:["Take 40-question mock test","Review wrong answers","Note all formulas in one page","Rest and plan Week 2"], yt:[{title:"TCS NQT Mock Test Practice",channel:"TCS iON / PrepInsta",url:"https://www.youtube.com/results?search_query=TCS+NQT+mock+test+practice"}] },
+
+    // WEEK 2
+    { day:8, title:"Time Speed Distance", topics:"Basic TSD, relative speed, trains, boats & streams", tags:["apt"], tasks:["Learn TSD triangle formula","Solve 15 speed problems","10 train problems","5 boat-stream problems"], yt:[{title:"Time Speed Distance TCS Shortcuts",channel:"HandaKaFunda",url:"https://www.youtube.com/results?search_query=time+speed+distance+placement+shortcuts"}] },
+    { day:9, title:"Averages + Ages", topics:"Average formula, weighted average, age-based problems", tags:["apt"], tasks:["Solve 20 average problems","10 age-based problems","Learn weighted average trick","Practice 15-min timed set"], yt:[{title:"Averages and Ages for Aptitude",channel:"Placement Season",url:"https://www.youtube.com/results?search_query=averages+problems+TCS+aptitude"}] },
+    { day:10, title:"Number Systems", topics:"LCM, HCF, divisibility rules, factors, unit digit", tags:["apt"], tasks:["Divisibility rules 2–19","Solve 20 LCM/HCF problems","10 number series from TCS","Unit digit calculation"], yt:[{title:"Number Systems TCS NQT",channel:"CareerRide",url:"https://www.youtube.com/results?search_query=number+system+TCS+NQT+aptitude"}] },
+    { day:11, title:"Verbal – Grammar + Error Detection", topics:"Subject-verb agreement, tenses, articles, prepositions", tags:["verbal"], tasks:["Revise grammar rules","20 error correction questions","10 fill in the blanks","Read grammar notes"], yt:[{title:"English Grammar for Placements",channel:"Unacademy Placements",url:"https://www.youtube.com/results?search_query=english+grammar+campus+placement+TCS"}] },
+    { day:12, title:"Number Series + Analogies", topics:"Finding missing number, letter series, analogies", tags:["apt"], tasks:["Solve 20 number series","10 letter series","10 analogy problems","Learn common series patterns"], yt:[{title:"Number Series Tricks for NQT",channel:"PrepInsta",url:"https://www.youtube.com/results?search_query=number+series+tricks+TCS+NQT"}] },
+    { day:13, title:"Reasoning – Coding Decoding", topics:"Letter shift, reversal coding, number coding patterns", tags:["apt"], tasks:["Learn 5 coding types","Solve 20 coding-decoding","10 symbol-based problems","Practice speed"], yt:[{title:"Coding Decoding Tricks for TCS",channel:"SSC/Bank Reasoning Channel",url:"https://www.youtube.com/results?search_query=coding+decoding+tricks+placement"}] },
+    { day:14, title:"Week 2 Mock Test", topics:"Aptitude+Reasoning full mock, timing practice", tags:["apt","verbal"], tasks:["45-minute aptitude mock","Identify weak topics","Revise formulas","Plan improvements"], yt:[{title:"Aptitude Mock Test TCS Pattern",channel:"PrepInsta",url:"https://www.youtube.com/results?search_query=TCS+aptitude+mock+test+full"}] },
+
+    // WEEK 3
+    { day:15, title:"Blood Relations + Directions", topics:"Family tree logic, compass direction problems", tags:["apt"], tasks:["Family tree method","20 blood relation problems","15 direction problems","Speed round"], yt:[{title:"Blood Relations Tricks",channel:"Maths Tricks Channel",url:"https://www.youtube.com/results?search_query=blood+relations+direction+sense+placement"}] },
+    { day:16, title:"Syllogisms + Logical Deduction", topics:"All/some/no type statements, Venn diagram method", tags:["apt"], tasks:["Learn Venn approach","25 syllogism questions","10 logical deduction","Practice with timer"], yt:[{title:"Syllogism Tricks for Placement",channel:"Unacademy",url:"https://www.youtube.com/results?search_query=syllogism+tricks+campus+placement"}] },
+    { day:17, title:"Seating Arrangement + Puzzles", topics:"Linear/circular arrangement, floor puzzles", tags:["apt"], tasks:["Linear arrangement: 10 sets","Circular arrangement: 5 sets","2 floor puzzle sets","Practice daily with stopwatch"], yt:[{title:"Seating Arrangement Puzzles",channel:"PrepInsta/Reasoning Channel",url:"https://www.youtube.com/results?search_query=seating+arrangement+TCS+NQT+reasoning"}] },
+    { day:18, title:"Verbal – Sentence Completion + Para Jumbles", topics:"Fill blanks logically, rearrange jumbled paragraphs", tags:["verbal"], tasks:["20 sentence completion","15 para-jumble questions","Learn connectors: however/therefore","Read editorial daily"], yt:[{title:"Para Jumbles and Sentence Completion",channel:"Unacademy English",url:"https://www.youtube.com/results?search_query=para+jumbles+sentence+completion+placement"}] },
+    { day:19, title:"Data Interpretation Basics", topics:"Bar charts, pie charts, line graphs, tables", tags:["apt"], tasks:["5 bar chart sets","5 pie chart questions","3 table DI problems","Speed reading data"], yt:[{title:"Data Interpretation Shortcuts",channel:"HandaKaFunda",url:"https://www.youtube.com/results?search_query=data+interpretation+campus+placement"}] },
+    { day:20, title:"Programming Logic – Flowcharts", topics:"Trace flowchart output, loops in flowcharts, decisions", tags:["code"], tasks:["Study flowchart symbols","Trace 10 flowchart examples","5 loop flowcharts","Predict outputs"], yt:[{title:"Flowchart Logic TCS NQT",channel:"TCS iON Prep Channel",url:"https://www.youtube.com/results?search_query=TCS+NQT+programming+logic+flowchart"}] },
+    { day:21, title:"Week 3 Mock + Revision", topics:"Full aptitude+reasoning+verbal 60-question mock", tags:["apt","verbal","code"], tasks:["60-question timed mock","Error analysis","Revise all weeks","Rest 2 hours"], yt:[{title:"TCS NQT Full Mock Test",channel:"PrepInsta",url:"https://www.youtube.com/results?search_query=TCS+NQT+2026+full+mock+test"}] },
+
+    // WEEK 4
+    { day:22, title:"Pseudocode + Output Tracing", topics:"C-style pseudocode, loops, conditionals, function calls", tags:["code"], tasks:["Trace 15 pseudocode snippets","Predict output of 10 programs","Loop tracing with variables","Recursion basics"], yt:[{title:"Pseudocode for TCS NQT Programming Section",channel:"PrepInsta/TCS Prep",url:"https://www.youtube.com/results?search_query=TCS+NQT+pseudocode+programming+logic+section"}] },
+    { day:23, title:"Algebra + Simple/Compound Interest", topics:"Linear equations, SI formula, CI formula, difference", tags:["apt"], tasks:["15 SI problems","15 CI problems","10 algebra equations","TCS specific CI questions"], yt:[{title:"SI CI Problems TCS Aptitude",channel:"CareerRide",url:"https://www.youtube.com/results?search_query=simple+compound+interest+TCS+aptitude"}] },
+    { day:24, title:"Permutation & Combination + Probability", topics:"nPr, nCr formulas, basic probability", tags:["apt"], tasks:["P&C formulas","15 combination problems","10 probability questions","TCS P&C patterns"], yt:[{title:"Permutation Combination Probability TCS",channel:"PrepInsta",url:"https://www.youtube.com/results?search_query=permutation+combination+probability+TCS+NQT"}] },
+    { day:25, title:"Verbal – Vocabulary Building", topics:"Synonyms, antonyms, idioms common in TCS tests", tags:["verbal"], tasks:["Learn 20 new words","20 synonym questions","15 antonym questions","10 idiom questions"], yt:[{title:"Vocabulary for Campus Placements",channel:"Wren Martin / Vocab Channel",url:"https://www.youtube.com/results?search_query=vocabulary+synonyms+antonyms+campus+placement"}] },
+    { day:26, title:"TCS Previous Year Aptitude Paper", topics:"Solve actual TCS NQT previous year questions", tags:["apt","verbal"], tasks:["Solve full 2023/2024 aptitude section","Time yourself","Review mistakes","Mark repeated question types"], yt:[{title:"TCS NQT Previous Year Questions",channel:"PrepInsta / IndiaBix",url:"https://www.youtube.com/results?search_query=TCS+NQT+previous+year+aptitude+questions"}] },
+    { day:27, title:"Programming Logic – Output Questions", topics:"C/Java/Python basic output prediction MCQs", tags:["code"], tasks:["30 C output questions","15 Java output questions","10 Python output questions","Note tricky patterns"], yt:[{title:"C Output Questions TCS NQT",channel:"Placement Season",url:"https://www.youtube.com/results?search_query=C+output+questions+TCS+NQT+programming+section"}] },
+    { day:28, title:"Month 1 Full Mock Test", topics:"Complete 90-minute aptitude+verbal+reasoning+logic mock", tags:["apt","verbal","code"], tasks:["Full 90-min mock test","Score and analysis","List top 5 weak areas","Plan Month 2 strategy"], yt:[{title:"TCS NQT Full Length Mock Test",channel:"PrepInsta",url:"https://www.youtube.com/results?search_query=TCS+NQT+2026+full+mock+test+90+minutes"}] },
+    // Days 29-30 buffer
+    { day:29, title:"Weak Area Revision – Aptitude", topics:"Revisit all topics where accuracy < 70%", tags:["apt"], tasks:["Solve 30 questions from weak topics","Re-watch relevant videos","Timed practice set","Track improvement"], yt:[{title:"Aptitude Revision Crash Course",channel:"PrepInsta",url:"https://www.youtube.com/results?search_query=aptitude+revision+TCS+NQT+crash+course"}] },
+    { day:30, title:"Month 1 Wrap-up + Goal Setting", topics:"Final revision, track scores, set Month 2 targets", tags:["apt","verbal","code"], tasks:["Review all mock scores","Set coding target for Month 2","Set up Python/Java practice environment","Celebrate progress! 🎉"], yt:[{title:"How to Crack TCS NQT – Full Strategy",channel:"Placement Season",url:"https://www.youtube.com/results?search_query=how+to+crack+TCS+NQT+full+preparation+strategy"}] },
+  ],
+  2: [
+    // WEEK 5 – Coding Basics
+    { day:31, title:"Python / Java – Setup & Basics", topics:"Choose your language, syntax basics, I/O, variables", tags:["code"], tasks:["Install Python OR Java","Hello world + basic I/O","Variable types practice","5 simple programs"], yt:[{title:"Python for Placements – Beginners",channel:"CodeWithHarry / Telusko",url:"https://www.youtube.com/results?search_query=python+basics+for+TCS+coding+placement"}] },
+    { day:32, title:"Loops + Conditionals", topics:"for/while loops, if-else-elif, nested loops", tags:["code"], tasks:["10 loop programs","5 nested loop programs","Pattern printing (star, number)","Solve HackerRank easy"], yt:[{title:"Loops and Conditionals Practice",channel:"CodeWithHarry",url:"https://www.youtube.com/results?search_query=python+loops+conditionals+placement+practice"}] },
+    { day:33, title:"Arrays / Lists – Basics", topics:"1D arrays, traversal, insertion, deletion, searching", tags:["code"], tasks:["Find max/min in array","Reverse an array","Linear search","Sum of elements"], yt:[{title:"Arrays for Placement Coding",channel:"Take U Forward / Striver",url:"https://www.youtube.com/results?search_query=arrays+basics+placement+coding+python"}] },
+    { day:34, title:"String Manipulation", topics:"Reverse string, palindrome, anagram, count characters", tags:["code"], tasks:["Reverse a string","Check palindrome","Count vowels","Find duplicate characters"], yt:[{title:"String Problems TCS Coding",channel:"PrepInsta Coding",url:"https://www.youtube.com/results?search_query=string+manipulation+TCS+coding+problems"}] },
+    { day:35, title:"Functions + Recursion Basics", topics:"Define functions, return values, simple recursion", tags:["code"], tasks:["Write 5 functions","Factorial via recursion","Fibonacci via recursion","GCD calculation"], yt:[{title:"Functions and Recursion for Placements",channel:"Striver / Love Babbar",url:"https://www.youtube.com/results?search_query=functions+recursion+placement+coding"}] },
+    { day:36, title:"Sorting Algorithms", topics:"Bubble sort, selection sort, insertion sort, understand logic", tags:["code"], tasks:["Code bubble sort","Code selection sort","Understand time complexity","Solve 5 sorting problems"], yt:[{title:"Sorting Algorithms for Placements",channel:"Striver",url:"https://www.youtube.com/results?search_query=sorting+algorithms+placement+coding+interview"}] },
+    { day:37, title:"Week 5 Coding Practice Test", topics:"Solve 2 coding problems in 45 minutes", tags:["code"], tasks:["Solve 2 TCS-level coding problems","Write clean code","Test edge cases","Review time complexity"], yt:[{title:"TCS Coding Questions Practice",channel:"PrepInsta Coding",url:"https://www.youtube.com/results?search_query=TCS+NQT+hands+on+coding+practice"}] },
+
+    // WEEK 6 – Core CS
+    { day:38, title:"OOPS – Classes, Objects, Encapsulation", topics:"Class definition, objects, access modifiers, getters/setters", tags:["cs"], tasks:["Create 3 simple classes","Implement encapsulation","Watch OOPS intro video","Write 10 OOPS MCQs"], yt:[{title:"OOP Concepts for Placement Interview",channel:"Telusko / Apna College",url:"https://www.youtube.com/results?search_query=OOP+concepts+interview+java+python"}] },
+    { day:39, title:"OOPS – Inheritance + Polymorphism", topics:"Single/multiple inheritance, overriding, overloading", tags:["cs"], tasks:["Code inheritance example","Code method overriding","Difference: overloading vs overriding","20 OOPS MCQ practice"], yt:[{title:"Inheritance and Polymorphism Interview Questions",channel:"Apna College",url:"https://www.youtube.com/results?search_query=inheritance+polymorphism+interview+questions"}] },
+    { day:40, title:"OOPS – Abstraction + Interfaces", topics:"Abstract classes, interfaces, difference, real examples", tags:["cs"], tasks:["Code abstract class","Code interface example","Real-life analogy","10 advanced OOPS MCQs"], yt:[{title:"Abstraction Interface Interview",channel:"CodeWithHarry",url:"https://www.youtube.com/results?search_query=abstraction+interface+java+interview+questions"}] },
+    { day:41, title:"DBMS – ER Diagrams + Keys", topics:"Entity, attributes, relationships, primary/foreign key, keys", tags:["cs"], tasks:["Draw ER diagram for student DB","List all types of keys","Normalization 1NF/2NF/3NF","20 DBMS MCQs"], yt:[{title:"DBMS Interview Questions",channel:"Gate Smashers",url:"https://www.youtube.com/results?search_query=DBMS+interview+questions+placement"}] },
+    { day:42, title:"SQL – Queries + Joins", topics:"SELECT, WHERE, GROUP BY, HAVING, INNER/LEFT/RIGHT JOIN", tags:["cs"], tasks:["Write 10 SELECT queries","3 JOIN problems","GROUP BY + HAVING practice","TCS SQL previous questions"], yt:[{title:"SQL for Placement Interview",channel:"Gate Smashers / Kudvenkat",url:"https://www.youtube.com/results?search_query=SQL+joins+queries+placement+interview"}] },
+    { day:43, title:"OS – Process, Threads, Scheduling", topics:"Process vs thread, scheduling algorithms (FCFS, SJF, RR)", tags:["cs"], tasks:["Process lifecycle notes","FCFS scheduling example","Round Robin calculation","20 OS MCQs"], yt:[{title:"OS Interview Questions for Placements",channel:"Gate Smashers",url:"https://www.youtube.com/results?search_query=operating+system+interview+questions+placement"}] },
+    { day:44, title:"Week 6 CS Theory Mock", topics:"20 OOPS + 20 DBMS + 10 OS MCQ timed test", tags:["cs"], tasks:["50-question CS theory mock","Review all wrong answers","Note formula sheet","Revise key definitions"], yt:[{title:"Core CS Mock Test TCS",channel:"PrepInsta",url:"https://www.youtube.com/results?search_query=core+CS+interview+mock+TCS+technical"}] },
+
+    // WEEK 7 – DSA + More
+    { day:45, title:"OS – Memory Management + Deadlock", topics:"Paging, segmentation, deadlock conditions, Banker's algorithm", tags:["cs"], tasks:["Deadlock 4 conditions","Banker's algorithm example","Paging notes","15 OS memory MCQs"], yt:[{title:"Deadlock Memory Management OS Interview",channel:"Gate Smashers",url:"https://www.youtube.com/results?search_query=deadlock+memory+management+OS+interview"}] },
+    { day:46, title:"Data Structures – Stack + Queue", topics:"Push/pop, LIFO/FIFO, applications, implement code", tags:["cs","code"], tasks:["Implement stack using array","Implement queue using array","Infix to postfix concept","5 stack/queue problems"], yt:[{title:"Stack Queue DSA Interview",channel:"Take U Forward",url:"https://www.youtube.com/results?search_query=stack+queue+DSA+interview+placement"}] },
+    { day:47, title:"Data Structures – Linked List", topics:"Singly/doubly linked list, insertion, deletion, reversal", tags:["cs","code"], tasks:["Code singly linked list","Reverse a linked list","Find middle of linked list","Detect loop"], yt:[{title:"Linked List Interview Questions",channel:"Take U Forward / Striver",url:"https://www.youtube.com/results?search_query=linked+list+interview+questions+placement"}] },
+    { day:48, title:"Data Structures – Trees Basics", topics:"Binary tree, BST, traversals (inorder/preorder/postorder)", tags:["cs","code"], tasks:["Binary tree notes","3 traversal implementations","Height of tree","Find max in BST"], yt:[{title:"Binary Tree Interview Questions",channel:"Take U Forward",url:"https://www.youtube.com/results?search_query=binary+tree+interview+questions+placement"}] },
+    { day:49, title:"Computer Networks Basics", topics:"OSI model, TCP/IP, HTTP vs HTTPS, DNS, IP addressing", tags:["cs"], tasks:["OSI 7 layers memory trick","TCP vs UDP difference","HTTP status codes list","15 CN MCQs"], yt:[{title:"Computer Networks Interview Questions",channel:"Gate Smashers",url:"https://www.youtube.com/results?search_query=computer+networks+interview+questions+placement"}] },
+    { day:50, title:"Coding – Array Problems Set", topics:"2-sum, maximum subarray, rotation, duplicates", tags:["code"], tasks:["2-sum problem","Find duplicate in array","Rotate array","Maximum subarray sum (Kadane)"], yt:[{title:"Array Problems Interview Coding",channel:"Striver / NeetCode",url:"https://www.youtube.com/results?search_query=array+problems+placement+interview+coding"}] },
+    { day:51, title:"Coding – String Problems Set", topics:"Anagram check, reverse words, count occurrences", tags:["code"], tasks:["Check anagram","Reverse words in sentence","Most frequent character","Remove duplicates from string"], yt:[{title:"String Interview Problems Python",channel:"Striver",url:"https://www.youtube.com/results?search_query=string+interview+problems+python+placement"}] },
+
+    // WEEK 8
+    { day:52, title:"Coding – Math Problems", topics:"Prime check, factorial, Fibonacci, GCD/LCM programs", tags:["code"], tasks:["Prime number program","Fibonacci up to N","GCD and LCM code","Armstrong number check"], yt:[{title:"Math Coding Problems Placement",channel:"PrepInsta Coding",url:"https://www.youtube.com/results?search_query=math+problems+TCS+coding+round+placement"}] },
+    { day:53, title:"Project Deep Dive – Day 1", topics:"Understand your final year project architecture fully", tags:["cs"], tasks:["Write project intro (2 mins)","List all technologies used","Explain your specific contribution","Prepare 5 likely questions"], yt:[{title:"How to Explain Project in Interview",channel:"Placement Cell",url:"https://www.youtube.com/results?search_query=how+to+explain+project+in+TCS+interview"}] },
+    { day:54, title:"Project Deep Dive – Day 2", topics:"Challenges faced, solutions, outcomes, improvements", tags:["cs"], tasks:["Note biggest challenge","Explain how you solved it","State project result/accuracy","Possible improvements list"], yt:[{title:"Project Discussion TR Interview",channel:"Placement Prep",url:"https://www.youtube.com/results?search_query=project+discussion+technical+interview+TCS"}] },
+    { day:55, title:"TCS Coding Questions Pattern", topics:"Analyze 2022–2025 TCS coding question types", tags:["code"], tasks:["Solve 5 previous TCS coding questions","Note time complexity","Practice reading problem statements","Attempt without hints first"], yt:[{title:"TCS NQT Coding Questions 2024",channel:"PrepInsta",url:"https://www.youtube.com/results?search_query=TCS+NQT+coding+questions+2024+hands+on"}] },
+    { day:56, title:"DBMS – Transactions + Normalization", topics:"ACID properties, 1NF/2NF/3NF/BCNF, transactions", tags:["cs"], tasks:["ACID properties with examples","Normalize a table to 3NF","Transaction states diagram","15 advanced DBMS MCQs"], yt:[{title:"DBMS Normalization ACID Interview",channel:"Gate Smashers",url:"https://www.youtube.com/results?search_query=DBMS+normalization+ACID+properties+interview"}] },
+    { day:57, title:"Full Technical Mock – Theory", topics:"OOPS + DBMS + OS + CN combined 60-question mock", tags:["cs"], tasks:["60-question timed mock (45 mins)","Strict no-help policy","Review all wrong","Plan revision"], yt:[{title:"Technical Interview Mock Test TCS",channel:"PrepInsta",url:"https://www.youtube.com/results?search_query=TCS+technical+interview+mock+test+CS"}] },
+    { day:58, title:"Full Technical Mock – Coding", topics:"Solve 2 coding problems in 60 minutes", tags:["code"], tasks:["Problem 1: Array (30 mins)","Problem 2: String (30 mins)","Self-evaluate logic clarity","Review cleaner solutions"], yt:[{title:"TCS Coding Mock Test",channel:"Placement Season",url:"https://www.youtube.com/results?search_query=TCS+NQT+coding+mock+test+2025"}] },
+    { day:59, title:"Revision Day – CS Core All Topics", topics:"Quick flash revision of OOPS, DBMS, OS, CN, DSA", tags:["cs"], tasks:["1 page each: OOPS, DBMS, OS, CN","Review key DSA definitions","Formula cheat sheet update","Rest well"], yt:[{title:"CS Core Quick Revision Placements",channel:"Gate Smashers",url:"https://www.youtube.com/results?search_query=CS+core+quick+revision+placement+interview"}] },
+    { day:60, title:"Month 2 Full Mock + Analysis", topics:"Complete NQT-style mock: Aptitude + Logic + Coding + CS", tags:["apt","code","cs"], tasks:["Full 2-hour mock test","Detailed score analysis","Identify top 3 weaknesses","Plan Month 3 strategy"], yt:[{title:"TCS NQT Full Mock 2 Hours",channel:"PrepInsta",url:"https://www.youtube.com/results?search_query=TCS+NQT+complete+mock+test+2+hours"}] },
+  ],
+  3: [
+    // WEEK 9 – TR Prep
+    { day:61, title:"TR Prep – Tell Me About Yourself", topics:"Structure your perfect 60-second self-introduction", tags:["hr"], tasks:["Write your intro (Education+Skills+Project+Goal)","Practice aloud 5 times","Record yourself and review","Keep it under 60 seconds"], yt:[{title:"Tell Me About Yourself TCS Interview",channel:"HR Interview Prep",url:"https://www.youtube.com/results?search_query=tell+me+about+yourself+TCS+interview+fresher"}] },
+    { day:62, title:"TR Prep – OOPS Interview Q&A", topics:"Top 30 OOPS interview questions with model answers", tags:["cs","hr"], tasks:["What is polymorphism? (practice answer)","Abstraction vs Encapsulation","Real-world OOPS examples","Record your answers"], yt:[{title:"OOPS Interview Questions and Answers",channel:"Apna College / CodeWithHarry",url:"https://www.youtube.com/results?search_query=OOPS+interview+questions+answers+TCS"}] },
+    { day:63, title:"TR Prep – DBMS + SQL Interview", topics:"DBMS top 25 questions, SQL query writing practice", tags:["cs"], tasks:["Explain normalization clearly","Write 5 SQL queries from memory","Explain joins with example","ACID properties practice"], yt:[{title:"DBMS SQL Interview TCS",channel:"Gate Smashers",url:"https://www.youtube.com/results?search_query=DBMS+SQL+interview+questions+TCS+technical"}] },
+    { day:64, title:"TR Prep – OS + CN Interview", topics:"Deadlock, scheduling, OSI model, TCP/IP top questions", tags:["cs"], tasks:["Explain deadlock in simple words","Scheduling difference (FCFS vs RR)","OSI vs TCP/IP table","15 CN interview questions"], yt:[{title:"OS CN Interview Questions Placements",channel:"Gate Smashers",url:"https://www.youtube.com/results?search_query=OS+CN+interview+questions+placement+TCS"}] },
+    { day:65, title:"TR Prep – Live Coding Practice", topics:"Write code on paper/whiteboard, explain logic aloud", tags:["code"], tasks:["Solve 3 problems on paper","Narrate logic while writing","Reverse string + palindrome + array max","Practice without running immediately"], yt:[{title:"Whiteboard Coding Interview Practice",channel:"Placement Season",url:"https://www.youtube.com/results?search_query=whiteboard+coding+interview+practice+placement"}] },
+    { day:66, title:"Mock Technical Interview – Round 1", topics:"Simulate full TR interview: intro + project + CS + coding", tags:["cs","hr","code"], tasks:["Conduct full mock with a friend/mirror","Time it (20–25 mins)","Take feedback","Improve weak spots"], yt:[{title:"TCS Technical Interview Mock",channel:"Placement Prep Channel",url:"https://www.youtube.com/results?search_query=TCS+technical+interview+mock+fresher+full"}] },
+    { day:67, title:"Mock Technical Interview – Round 2", topics:"Second mock, focus on confidence and clarity", tags:["cs","hr","code"], tasks:["Repeat mock interview","Improve based on last feedback","Focus on project explanation","Improve speaking pace"], yt:[{title:"How to Ace TCS Technical Round",channel:"Placement Season",url:"https://www.youtube.com/results?search_query=TCS+technical+round+tips+fresher+2026"}] },
+
+    // WEEK 10 – MR + HR Prep
+    { day:68, title:"MR Prep – Situational Questions", topics:"Project delays, team conflict, pressure handling scenarios", tags:["hr"], tasks:["Prepare STAR method answers","5 situational question answers","Practice calm delivery","Work ethic examples"], yt:[{title:"Managerial Round Questions TCS",channel:"HR Interview Prep",url:"https://www.youtube.com/results?search_query=TCS+managerial+round+interview+questions+fresher"}] },
+    { day:69, title:"MR Prep – Relocation + Flexibility Q", topics:"Shift work, relocation readiness, team compatibility", tags:["hr"], tasks:["Prepare honest relocation answer","Night shift response practice","Teamwork example story","5-year plan answer"], yt:[{title:"MR Round TCS Freshers",channel:"Placement Season",url:"https://www.youtube.com/results?search_query=TCS+MR+managerial+round+fresher+questions"}] },
+    { day:70, title:"HR Prep – Why TCS? + Strengths/Weaknesses", topics:"Craft authentic answers that show research and self-awareness", tags:["hr"], tasks:["Research TCS values and culture","'Why TCS?' – 2 versions ready","Genuine strength with example","Weakness that shows growth"], yt:[{title:"HR Interview Questions TCS Fresher",channel:"HR Prep Channel",url:"https://www.youtube.com/results?search_query=TCS+HR+interview+questions+fresher+2026"}] },
+    { day:71, title:"HR Prep – Common 20 HR Questions", topics:"Achievements, failures, leadership, pressure, team situations", tags:["hr"], tasks:["Write answers for 20 HR questions","Practice in front of mirror","Control filler words (um, basically)","Confident closing statement"], yt:[{title:"Top 20 HR Interview Questions Answers",channel:"Indiabix / Placement Prep",url:"https://www.youtube.com/results?search_query=top+20+HR+interview+questions+answers+fresher"}] },
+    { day:72, title:"Body Language + Communication", topics:"Posture, eye contact, voice modulation, handling silence", tags:["hr"], tasks:["Record a 3-minute introduction video","Watch it and improve","Practice calm breathing before speaking","Power posture exercise"], yt:[{title:"Body Language for Interview",channel:"LinkedIn / TED Talks",url:"https://www.youtube.com/results?search_query=body+language+interview+tips+campus+placement"}] },
+    { day:73, title:"Full Mock Interview – TR + MR + HR", topics:"Simulate the complete interview sequence in one session", tags:["cs","hr","code"], tasks:["TR mock (20 mins)","MR mock (10 mins)","HR mock (10 mins)","Get full feedback from peer/mentor"], yt:[{title:"Full TCS Interview Simulation",channel:"Placement Season",url:"https://www.youtube.com/results?search_query=TCS+full+interview+simulation+mock+TR+HR"}] },
+    { day:74, title:"Revision – Top 50 Interview Q&A", topics:"Most frequent technical + HR questions – speed review", tags:["cs","hr"], tasks:["Review 50 Q&A set","Answer each in < 30 seconds","Mark the ones to improve","Print cheat sheet"], yt:[{title:"Top 50 TCS Interview Questions",channel:"PrepInsta",url:"https://www.youtube.com/results?search_query=top+50+TCS+interview+questions+2026"}] },
+
+    // WEEK 11 – ILP Prep
+    { day:75, title:"ILP Prep – Java Basics", topics:"Java syntax, OOP in Java, basic programs TCS ILP expects", tags:["ilp"], tasks:["Java Hello World to classes","5 OOP programs in Java","Java collections overview","Scanner input/output"], yt:[{title:"Java for TCS ILP",channel:"Telusko / Apna College Java",url:"https://www.youtube.com/results?search_query=java+basics+TCS+ILP+preparation"}] },
+    { day:76, title:"ILP Prep – Core Java Concepts", topics:"Exception handling, file I/O, threads, collections", tags:["ilp"], tasks:["Try-catch-finally practice","ArrayList vs LinkedList","Thread basics","HashMap usage"], yt:[{title:"Core Java Interview Questions",channel:"Telusko",url:"https://www.youtube.com/results?search_query=core+java+interview+questions+TCS+ILP"}] },
+    { day:77, title:"ILP Prep – SQL Advanced", topics:"Stored procedures, triggers, views, aggregate functions", tags:["ilp"], tasks:["Write stored procedure","Create a view","GROUP BY + aggregate practice","20 advanced SQL questions"], yt:[{title:"Advanced SQL for TCS ILP",channel:"Gate Smashers / Kudvenkat",url:"https://www.youtube.com/results?search_query=advanced+SQL+stored+procedures+TCS+ILP"}] },
+    { day:78, title:"ILP Prep – Unix/Linux Basics", topics:"Basic Linux commands, file system, shell scripting basics", tags:["ilp"], tasks:["Top 30 Linux commands","File operations: ls/cp/mv/rm","Shell script: hello world","Permissions: chmod concept"], yt:[{title:"Linux for TCS ILP Freshers",channel:"The Linux Channel",url:"https://www.youtube.com/results?search_query=linux+commands+TCS+ILP+fresher"}] },
+    { day:79, title:"ILP Prep – Agile Methodology", topics:"Scrum framework, sprints, ceremonies, roles, kanban", tags:["ilp"], tasks:["Scrum vs Waterfall","Sprint cycle explained","5 Agile values","20 Agile MCQ practice"], yt:[{title:"Agile Scrum for Freshers TCS ILP",channel:"Agile Coach",url:"https://www.youtube.com/results?search_query=agile+scrum+basics+TCS+ILP+fresher"}] },
+    { day:80, title:"ILP Internal Assessment Prep", topics:"TCS ILP assessment pattern, previous questions practice", tags:["ilp"], tasks:["ILP exam pattern research","Java MCQ mock (25 questions)","SQL query test (10 queries)","Agile MCQ (15 questions)"], yt:[{title:"TCS ILP Assessment Preparation",channel:"TCS Prep / PrepInsta",url:"https://www.youtube.com/results?search_query=TCS+ILP+internal+assessment+preparation"}] },
+    { day:81, title:"ILP Mock Assessment Test", topics:"Full ILP style 60-question mock: Java + SQL + Linux + Agile", tags:["ilp"], tasks:["Full ILP mock (60 mins)","Score ≥ 75% target","Review all wrong","Note improvement areas"], yt:[{title:"TCS ILP Mock Test Java SQL",channel:"PrepInsta",url:"https://www.youtube.com/results?search_query=TCS+ILP+mock+test+java+sql+agile"}] },
+
+    // WEEK 12 – Final Sprint
+    { day:82, title:"NQT Final Mock – Full Test 1", topics:"Complete NQT simulation: all sections, full time", tags:["apt","code","verbal"], tasks:["Full 3-hour NQT mock","Strict exam conditions","Score all sections","Analyze per-section performance"], yt:[{title:"TCS NQT Full Mock Final",channel:"PrepInsta",url:"https://www.youtube.com/results?search_query=TCS+NQT+2026+final+mock+test"}] },
+    { day:83, title:"NQT Final Mock – Full Test 2", topics:"Second complete NQT simulation, improve on Test 1 score", tags:["apt","code","verbal"], tasks:["Full NQT Mock 2","Compare scores with Mock 1","Fix remaining weak areas","Focus extra on coding section"], yt:[{title:"TCS NQT Mock Test Practice 2",channel:"PrepInsta",url:"https://www.youtube.com/results?search_query=TCS+NQT+full+mock+test+2+2026"}] },
+    { day:84, title:"Interview Final Mock – Full Sequence", topics:"TR + MR + HR full sequence mock, video record it", tags:["cs","hr","code"], tasks:["Video record full mock","Self-review video","Improve one specific thing","Peer feedback session"], yt:[{title:"TCS Interview Final Mock",channel:"Placement Season",url:"https://www.youtube.com/results?search_query=TCS+interview+full+mock+final+2026"}] },
+    { day:85, title:"Rapid Revision – Aptitude Cheat Sheet", topics:"All formulas, shortcuts, tricks on 2 pages", tags:["apt"], tasks:["Create formula cheat sheet","Speed-solve 30 aptitude questions","Review most common TCS patterns","Boost confidence"], yt:[{title:"Aptitude Formulas Cheat Sheet",channel:"PrepInsta",url:"https://www.youtube.com/results?search_query=aptitude+formulas+cheat+sheet+placement"}] },
+    { day:86, title:"Rapid Revision – CS Core Cheat Sheet", topics:"OOPS, DBMS, OS, CN definitions on one page each", tags:["cs"], tasks:["1 page OOPS summary","1 page DBMS key points","1 page OS key points","1 page CN key points"], yt:[{title:"CS Core Cheat Sheet Interview",channel:"Gate Smashers",url:"https://www.youtube.com/results?search_query=CS+core+interview+cheat+sheet+placement"}] },
+    { day:87, title:"Coding – Final Practice Set", topics:"Solve 5 TCS-level coding problems without hints", tags:["code"], tasks:["5 problems in 90 minutes","No external help","Clean readable code","Time complexity for each"], yt:[{title:"TCS Coding Final Practice",channel:"PrepInsta Coding",url:"https://www.youtube.com/results?search_query=TCS+NQT+coding+final+practice+2026"}] },
+    { day:88, title:"ILP Final Revision", topics:"Java + SQL + Linux + Agile quick revision", tags:["ilp"], tasks:["Java: 20 MCQs","SQL: 10 queries","Linux: 15 command questions","Agile: 15 MCQs"], yt:[{title:"TCS ILP Quick Revision",channel:"PrepInsta",url:"https://www.youtube.com/results?search_query=TCS+ILP+quick+revision+java+sql+linux"}] },
+    { day:89, title:"Mental Preparation + Strategy", topics:"Exam day strategy, time management, confidence building", tags:["hr"], tasks:["Plan exam day schedule","Time per section planning","Relaxation technique practice","Positive affirmation writing"], yt:[{title:"Exam Day Strategy TCS NQT",channel:"Placement Season",url:"https://www.youtube.com/results?search_query=TCS+NQT+exam+day+strategy+tips"}] },
+    { day:90, title:"🏆 Day 90 – YOU'RE READY!", topics:"Final self-assessment, celebrate progress, stay confident", tags:["hr"], tasks:["Final confidence check","Review your journey (Day 1 vs Day 90)","Trust your preparation","You've got this! 💪"], yt:[{title:"TCS NQT Last Day Motivation",channel:"Placement Season",url:"https://www.youtube.com/results?search_query=TCS+NQT+preparation+tips+motivation+crack"}] },
+  ]
+};
+
+// ===================== STATE =====================
+let completed = JSON.parse(localStorage.getItem('tcs-progress') || '{}');
+let currentDayData = null;
+
+// ===================== RENDER =====================
+function renderMonth(month) {
+  const days = curriculum[month];
+  const container = document.getElementById(`days-m${month}`);
+  container.innerHTML = '';
+
+  // Group into weeks
+  const weeksCount = Math.ceil(days.length / 7);
+  let weekStart = month === 1 ? 1 : month === 2 ? 5 : 9;
+
+  for(let w = 0; w < weeksCount; w++) {
+    const weekDays = days.slice(w*7, (w+1)*7);
+    if(!weekDays.length) continue;
+
+    const weekDiv = document.createElement('div');
+    weekDiv.className = 'week-block';
+
+    const wLabel = document.createElement('div');
+    wLabel.className = 'week-label';
+    wLabel.textContent = `Week ${weekStart + w}`;
+    weekDiv.appendChild(wLabel);
+
+    const grid = document.createElement('div');
+    grid.className = 'days-grid';
+
+    weekDays.forEach(d => {
+      const card = document.createElement('div');
+      card.className = 'day-card' + (completed[d.day] ? ' completed' : '');
+      card.innerHTML = `
+        <div class="day-top">
+          <div class="day-num">DAY ${d.day}</div>
+          <div class="day-check">${completed[d.day] ? '✓' : ''}</div>
+        </div>
+        <div class="day-title">${d.title}</div>
+        <div class="day-topics">${d.topics}</div>
+        <div class="day-tags">${d.tags.map(t=>`<span class="day-tag tag-${t}">${tagLabel(t)}</span>`).join('')}</div>
+        ${d.yt && d.yt[0] ? `<a class="yt-link" href="${d.yt[0].url}" target="_blank"><span class="yt-icon">▶</span>${d.yt[0].title.substring(0,35)}…</a>` : ''}
+      `;
+      card.addEventListener('click', () => openModal(d));
+      grid.appendChild(card);
+    });
+
+    weekDiv.appendChild(grid);
+    container.appendChild(weekDiv);
+  }
+}
+
+function tagLabel(t) {
+  return {apt:'Aptitude',code:'Coding',cs:'CS Core',verbal:'Verbal',hr:'HR',ilp:'ILP'}[t] || t;
+}
+
+// ===================== MODAL =====================
+function openModal(d) {
+  currentDayData = d;
+  document.getElementById('modal-daynum').textContent = `DAY ${d.day} OF 90`;
+  document.getElementById('modal-title').textContent = d.title;
+
+  let html = `
+    <div class="modal-section">
+      <div class="modal-section-title">Today's Focus</div>
+      <p style="font-size:14px;color:var(--muted);line-height:1.6">${d.topics}</p>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">Tasks to Complete</div>
+      <ul class="task-list">${d.tasks.map(t=>`<li>${t}</li>`).join('')}</ul>
+    </div>`;
+
+  if(d.yt && d.yt.length) {
+    html += `<div class="modal-section"><div class="modal-section-title">YouTube Resources</div>`;
+    d.yt.forEach(v => {
+      html += `<a class="modal-yt" href="${v.url}" target="_blank">
+        <span class="yt-thumb">📺</span>
+        <div class="yt-info"><div class="yt-title">${v.title}</div><div class="yt-channel">${v.channel}</div></div>
+        <span style="color:#ff4444">↗</span>
+      </a>`;
+    });
+    html += `</div>`;
+  }
+
+  document.getElementById('modal-body').innerHTML = html;
+
+  const btn = document.getElementById('modal-btn');
+  if(completed[d.day]) {
+    btn.textContent = '✓ Completed – Click to Undo';
+    btn.classList.add('done');
+  } else {
+    btn.textContent = '✓ Mark as Complete';
+    btn.classList.remove('done');
+  }
+
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  currentDayData = null;
+}
+
+function closeModalOutside(e) {
+  if(e.target.id === 'modal') closeModal();
+}
+
+function toggleDayFromModal() {
+  if(!currentDayData) return;
+  toggleDay(currentDayData.day);
+  openModal(currentDayData);
+}
+
+// ===================== TOGGLE =====================
+function toggleDay(day) {
+  if(completed[day]) {
+    delete completed[day];
+  } else {
+    completed[day] = Date.now();
+    showToast('Day ' + day + ' completed! 🎉');
+  }
+  localStorage.setItem('tcs-progress', JSON.stringify(completed));
+  updateStats();
+  // Re-render all months to update card styles
+  [1,2,3].forEach(m => renderMonth(m));
+}
+
+// ===================== STATS =====================
+function updateStats() {
+  const all = [].concat(curriculum[1], curriculum[2], curriculum[3]);
+  const total = all.length;
+  const done = Object.keys(completed).length;
+  const pct = Math.round(done/total*100);
+
+  document.getElementById('pct').textContent = pct + '%';
+  document.getElementById('days-done-sub').textContent = `${done} of ${total} days completed`;
+  document.getElementById('main-bar').style.width = pct + '%';
+  document.getElementById('hdr-done').textContent = done;
+  document.getElementById('hdr-left').textContent = total - done;
+
+  [1,2,3].forEach(m => {
+    const mDays = curriculum[m];
+    const mDone = mDays.filter(d => completed[d.day]).length;
+    const mPct = Math.round(mDone/mDays.length*100);
+    document.getElementById(`m${m}-pct`).textContent = mPct + '%';
+    document.getElementById(`m${m}-bar`).style.width = mPct + '%';
+  });
+}
+
+// ===================== TABS =====================
+function showMonth(m, btn) {
+  document.querySelectorAll('.month-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('month-' + m).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ===================== EXPORT =====================
+function exportProgress() {
+  const data = { exported: new Date().toISOString(), completed };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'tcs-nqt-progress.json';
+  a.click();
+  showToast('Progress exported! Save to your GitHub repo.');
+}
+
+function resetAll() {
+  if(confirm('Reset ALL progress? This cannot be undone.')) {
+    completed = {};
+    localStorage.removeItem('tcs-progress');
+    updateStats();
+    [1,2,3].forEach(m => renderMonth(m));
+    showToast('Progress reset.');
+  }
+}
+
+// ===================== TOAST =====================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ===================== INIT =====================
+[1,2,3].forEach(m => renderMonth(m));
+updateStats();
+
+// ===================== SERVICE WORKER =====================
+if('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then(reg => console.log('✅ Service Worker registered:', reg.scope))
+      .catch(err => console.log('❌ SW error:', err));
+  });
+}
+</script>
+</body>
+</html>

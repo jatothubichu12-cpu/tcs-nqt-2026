@@ -1,0 +1,22 @@
+{
+  "name": "TCS NQT 2026 Prep Tracker",
+  "short_name": "TCS NQT",
+  "description": "90-day TCS NQT preparation tracker with day-wise tasks and YouTube resources",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0a0f1e",
+  "theme_color": "#00d4ff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192x192/00d4ff/0a0f1e?text=TCS",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://via.placeholder.com/512x512/00d4ff/0a0f1e?text=TCS",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
